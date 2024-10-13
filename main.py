@@ -22,7 +22,7 @@ def get_average_air_quality():
     panda_table.index = panda_table.index + 1
 
     write_markdown(
-        "The different Air Quality indicator readings in New York for 2022",
+        "The different Air Quality indicator readings in New York for 2021",
         header=True,
         new_log_file=True,
     )

@@ -38,6 +38,7 @@ def test_extract():
         "https://data.cityofnewyork.us/resource/c3uy-2p5r.csv?$$app_token=uAdUHLatfvbfEfX5tTF9FYQFX&$limit=10000",
         "air_quality.csv",
         ("time_period", "2021"),
+        "unique_id",
     )
 
     assert os.path.exists("data/air_quality.csv")
@@ -159,7 +160,7 @@ def test_get_table_columns():
 
 if __name__ == "__main__":
     test_extract()
-    # test_transform_and_load()
+    test_transform_and_load()
     # test_read_data()
     # test_save_data()
     # test_update_data()

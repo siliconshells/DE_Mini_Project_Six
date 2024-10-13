@@ -11,3 +11,11 @@ def write_markdown(
             file.write(f"\n{log}\n\n<br /><br />\n\n")
         else:
             file.write(f"{log}<br />")
+
+
+def test_numeric(value) -> bool:
+    try:
+        float(value)
+        return True
+    except:
+        return False
