@@ -1,4 +1,4 @@
-### The different Air Quality indicator readings in New York for 2021 ### 
+### Different Air Quality indicator readings in New York for 2021 ### 
 The query executed was:<br />
 ```sql
 SELECT indicator_name, 
@@ -22,7 +22,7 @@ And the result was:<br />
 
 <br /><br />
 
-### The Fine particles (PM 2.5) Air Quality in New York neighbourhoods for 2021 ### 
+### Fine particles (PM 2.5) Air Quality in New York neighbourhoods for 2021 ### 
 The query executed was:<br />
 ```sql
 SELECT  geo_place_name,
@@ -116,7 +116,7 @@ And the result was:<br />
 
 <br /><br />
 
-### The Nitrogen dioxide (NO2) Air Quality in New York neighbourhoods for 2021 ### 
+### Nitrogen dioxide (NO2) Air Quality in New York neighbourhoods for 2021 ### 
 The query executed was:<br />
 ```sql
 SELECT  geo_place_name,
@@ -210,7 +210,7 @@ And the result was:<br />
 
 <br /><br />
 
-### The Ozone (O3) Air Quality in New York neighbourhoods for 2021 ### 
+### Ozone (O3) Air Quality in New York neighbourhoods for 2021 ### 
 The query executed was:<br />
 ```sql
 SELECT  geo_place_name,

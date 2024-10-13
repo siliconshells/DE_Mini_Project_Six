@@ -1,5 +1,5 @@
 class query:
-    air_quality_one = "select * from le88_tbl_air_quality where air_quality_id = {0}"
+    query_one_record = "select * from {0} where {1} = {2}"
 
     indicators = "select * from le88_tbl_indicator"
 

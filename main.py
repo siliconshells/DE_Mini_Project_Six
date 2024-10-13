@@ -22,7 +22,7 @@ def get_average_air_quality():
     panda_table.index = panda_table.index + 1
 
     write_markdown(
-        "The different Air Quality indicator readings in New York for 2021",
+        "Different Air Quality indicator readings in New York for 2021",
         header=True,
         new_log_file=True,
     )
@@ -61,10 +61,8 @@ def get_location_average_air_quality():
         )
         panda_table.index = panda_table.index + 1
 
-        write_markdown(
-            f"The {indicator["indicator_name"]} Air Quality in New York neighbourhoods for 2021",
-            header=True,
-        )
+        title = f"{indicator["indicator_name"]} Air Quality in New York neighbourhoods for 2021"
+        write_markdown(title, header=True)
         write_markdown("The query executed was:")
         write_markdown(executed, True)
         write_markdown("And the result was:")

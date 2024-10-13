@@ -104,19 +104,21 @@ def test_transform_and_load():
 
 # Test read data
 def test_read_data():
-    rows = read_data(query.air_quality_one, [825967])
-    assert rows[0]["data_value"] == 12
+    rows = read_data(
+        query.query_one_record, ["le88_tbl_air_quality", "air_quality_id", 823470]
+    )
+    assert rows[0]["data_value"] == 6
     print("Record Reading Test Successful")
 
 
 # Test save data
 def test_save_data():
-    result = read_data(query.air_quality_one, [100000])
+    result = read_data(query.query_one_record, ["le88_tbl_geo_data", "geo_id", 100000])
     assert result is None
 
-    save_data("air_quality.db", "geo_data", ["100000", "Lancaster", "UFO"])
+    save_data("le88_tbl_geo_data", ["100000", "Lancaster", "UFO"])
 
-    result = read_data(query.air_quality_one, [100000])
+    result = read_data(query.query_one_record, ["le88_tbl_geo_data", "geo_id", 100000])
     assert len(result) == 1
 
     print("Record Saving Test Successful")
@@ -125,12 +127,12 @@ def test_save_data():
 # Test update data
 def test_update_data():
 
-    result = read_data(query.air_quality_one, [100000])
+    result = read_data(query.query_one_record, ["le88_tbl_geo_data", "geo_id", 100000])
     assert result[0][1] == "Lancaster"
 
-    update_data("air_quality.db", "geo_data", {"geo_place_name": "Duke"}, 100000)
+    update_data("le88_tbl_geo_data", {"geo_place_name": "Duke"}, 100000)
 
-    result = read_data(query.air_quality_one, [100000])
+    result = read_data(query.query_one_record, ["le88_tbl_geo_data", "geo_id", 100000])
     assert result[0][1] == "Duke"
 
     print("Record Update Test Successful")
@@ -139,12 +141,12 @@ def test_update_data():
 # Test delete data
 def test_delete_data():
 
-    result = read_data(query.air_quality_one, [100000])
+    result = read_data(query.query_one_record, ["le88_tbl_geo_data", "geo_id", 100000])
     assert len(result) == 1
 
-    print(delete_data("air_quality.db", "geo_data", [100000]))
+    print(delete_data("le88_tbl_geo_data", 100000))
 
-    result = read_data(query.air_quality_one, [100000])
+    result = read_data(query.query_one_record, ["le88_tbl_geo_data", "geo_id", 100000])
     assert result is None
 
     print("Record Deletion Test Successful")
@@ -153,16 +155,16 @@ def test_delete_data():
 # Test read all column names
 def test_get_table_columns():
 
-    columns = get_table_columns("air_quality")
-    assert len(columns) == 6
+    columns = get_table_columns("le88_tbl_air_quality")
+    assert len(columns.split(",")) == 6
     print("Reading All Column Test Successful")
 
 
 if __name__ == "__main__":
     test_extract()
     test_transform_and_load()
-    # test_read_data()
-    # test_save_data()
-    # test_update_data()
-    # test_delete_data()
-    # test_get_table_columns()
+    test_read_data()
+    test_save_data()
+    test_update_data()
+    test_delete_data()
+    test_get_table_columns()

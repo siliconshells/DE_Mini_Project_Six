@@ -44,9 +44,8 @@ def read_data(query: str, parameters: list, add_script=False):
 def save_data(table_name: str, row: list):
     conn = connect_to_databricks()
     c = conn.cursor()
-    col_names = ", ".join(get_table_columns(table_name))
     data_values = "', '".join(row)
-    to_execute = f"INSERT INTO ids706_data_engineering.{table_name} ({col_names}) VALUES ('{data_values}')"
+    to_execute = f"INSERT INTO {table_name} ({get_table_columns(table_name)}) VALUES ('{data_values}')"
     c.execute(to_execute)
     conn.commit()
     c.close()
@@ -57,7 +56,9 @@ def save_data(table_name: str, row: list):
 def delete_data(table_name: str, data_id: int):
     conn = connect_to_databricks()
     c = conn.cursor()
-    to_execute = f"delete from ids706_data_engineering.{table_name} where {get_primary_key(c, table_name)} = {data_id}"
+    to_execute = (
+        f"delete from {table_name} where {get_primary_key(c, table_name)} = {data_id}"
+    )
     c.execute(to_execute)
     conn.commit()
     c.close()
@@ -71,7 +72,7 @@ def update_data(table_name: str, things_to_update: dict, data_id: int):
     set_values = ", ".join(
         [(k + "='" + v + "'") for (k, v) in things_to_update.items()]
     )
-    to_execute = f"UPDATE ids706_data_engineering.{table_name} SET {set_values} WHERE {get_primary_key(c, table_name)} = {data_id}"
+    to_execute = f"UPDATE {table_name} SET {set_values} WHERE {get_primary_key(c, table_name)} = {data_id}"
     c.execute(to_execute)
     conn.commit()
     c.close()
