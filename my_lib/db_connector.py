@@ -6,9 +6,9 @@ from dotenv import load_dotenv
 def connect_to_databricks():
     load_dotenv()
     connection = sql.connect(
-        server_hostname=os.getenv("databricks_server_host"),
-        http_path=os.getenv("databricks_sql_http"),
-        access_token=os.getenv("databricks_api_key"),
+        server_hostname=os.getenv("DATABRICKS_SERVER_HOST"),
+        http_path=os.getenv("DATABRICKS_SQL_HTTP"),
+        access_token=os.getenv("DATABRICKS_API_KEY"),
     )
     return connection
 
