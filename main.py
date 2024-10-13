@@ -61,7 +61,9 @@ def get_location_average_air_quality():
         )
         panda_table.index = panda_table.index + 1
 
-        title = f"{indicator["indicator_name"]} Air Quality in New York neighbourhoods for 2021"
+        title = "{0} Air Quality in New York neighbourhoods for 2021".format(
+            indicator["indicator_name"]
+        )
         write_markdown(title, header=True)
         write_markdown("The query executed was:")
         write_markdown(executed, True)
