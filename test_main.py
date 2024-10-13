@@ -35,7 +35,9 @@ def test_extract():
     assert not os.path.exists("population_bar.png")
 
     extract(
-        "https://data.cityofnewyork.us/resource/c3uy-2p5r.csv?$$app_token=uAdUHLatfvbfEfX5tTF9FYQFX&$limit=10000",
+        "https://data.cityofnewyork.us/resource/c3uy-2p5r.csv?$$app_token={0}&$limit=10000".format(
+            os.getenv("APP_TOKEN")
+        ),
         "air_quality.csv",
         ("time_period", "2021"),
         "unique_id",

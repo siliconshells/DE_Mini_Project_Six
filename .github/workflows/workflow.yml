@@ -19,4 +19,9 @@ jobs:
       - name: lint
         run: make lint
       - name: test
+        env: 
+          DATABRICKS_API_KEY: ${{secrets.DATABRICKS_API_KEY}}
+          DATABRICKS_SERVER_HOST: ${{secrets.DATABRICKS_SERVER_HOST}}
+          DATABRICKS_SQL_HTTP: ${{secrets.DATABRICKS_SQL_HTTP}}
+          APP_TOKEN: ${{secrets.APP_TOKEN}}
         run: make test
