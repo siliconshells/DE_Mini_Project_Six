@@ -88,9 +88,8 @@ def transform_n_load(
                     data_values = "', '".join(
                         [(row[column_map[col]]) for col in columns]
                     )
-                    c.execute(
-                        f"INSERT INTO {lookup_table} ({', '.join(columns)}) VALUES ('{data_values}')"
-                    )
+                    to_execute = f"INSERT INTO {lookup_table} ({', '.join(columns)}) VALUES ('{data_values}')"
+                    c.execute(to_execute)
                     conn.commit()
                     loaded_lookups[lookup_table].append(id)
 
@@ -106,9 +105,8 @@ def transform_n_load(
 
         # NOW INSERT ALL ITEMS IN EACH MAIN TABLE AT A GO TO REDUCE TRIPS TO DATABASE
         for atable, tuples_list in things_to_insert.items():
-            c.execute(
-                f"INSERT INTO {atable} ({', '.join(new_data_tables[atable])}) VALUES {",".join(tuples_list)}"
-            )
+            to_execute = f"INSERT INTO {atable} ({', '.join(new_data_tables[atable])}) VALUES {",".join(tuples_list)}"
+            c.execute(to_execute)
             conn.commit()
     except Exception as error:
         print("Error in transform:", error)
