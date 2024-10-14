@@ -4,7 +4,6 @@ from my_lib.extract import extract
 from my_lib.transform import transform_n_load
 from my_lib.crud import (
     read_data,
-    read_all_data,
     save_data,
     delete_data,
     update_data,
@@ -22,7 +21,6 @@ def handle_arguments(args):
             "extract",
             "transform_n_load",
             "read_data",
-            "read_all_data",
             "save_data",
             "delete_data",
             "update_data",
@@ -34,42 +32,34 @@ def handle_arguments(args):
     if args.Functions == "extract":
         parser.add_argument("url")
         parser.add_argument("file_name")
+        parser.add_argument("column_contains")
+        parser.add_argument("index_column")
 
     elif args.Functions == "transform_n_load":
         parser.add_argument("local_dataset")
-        parser.add_argument("database_name")
         parser.add_argument("new_data_tables")
         parser.add_argument("new_lookup_tables")
         parser.add_argument("column_attributes")
         parser.add_argument("column_map")
 
     elif args.Functions == "read_data":
-        parser.add_argument("database_name")
-        parser.add_argument("table_name")
-        parser.add_argument("data_id")
-
-    elif args.Functions == "read_all_data":
-        parser.add_argument("database_name")
-        parser.add_argument("table_name")
+        parser.add_argument("query")
+        parser.add_argument("parameters")
 
     elif args.Functions == "save_data":
-        parser.add_argument("database_name")
         parser.add_argument("table_name")
         parser.add_argument("row")
 
     elif args.Functions == "update_data":
-        parser.add_argument("database_name")
         parser.add_argument("table_name")
         parser.add_argument("data_id")
         parser.add_argument("things_to_update")
 
     elif args.Functions == "delete_data":
-        parser.add_argument("database_name")
         parser.add_argument("table_name")
         parser.add_argument("data_id")
 
     elif args.Functions == "get_table_columns":
-        parser.add_argument("database_name")
         parser.add_argument("table_name")
 
     # parse again
@@ -83,14 +73,20 @@ def main():
 
     if args.Functions == "extract":
         print("Extracting data...")
-        print(extract(args.url, args.file_name))
+        print(
+            extract(
+                args.url,
+                args.file_name,
+                ast.literal_eval(args.column_contains),
+                args.index_column,
+            )
+        )
 
     elif args.Functions == "transform_n_load":
         print("Transforming and loading data...")
         print(
             transform_n_load(
                 args.local_dataset,
-                args.database_name,
                 ast.literal_eval(args.new_data_tables),
                 ast.literal_eval(args.new_lookup_tables),
                 ast.literal_eval(args.column_attributes),
@@ -99,19 +95,11 @@ def main():
         )
 
     elif args.Functions == "read_data":
-        print(
-            read_data(
-                args.database_name, args.table_name, ast.literal_eval(args.data_id)
-            )
-        )
-
-    elif args.Functions == "read_all_data":
-        print(read_all_data(args.database_name, args.table_name))
+        print(read_data(args.query, ast.literal_eval(args.parameters)))
 
     elif args.Functions == "save_data":
         print(
             save_data(
-                args.database_name,
                 args.table_name,
                 ast.literal_eval(args.row),
             )
@@ -120,7 +108,6 @@ def main():
     elif args.action == "update_data":
         print(
             update_data(
-                args.database_name,
                 args.table_name,
                 ast.literal_eval(args.data_id),
                 ast.literal_eval(args.things_to_update),
@@ -128,14 +115,10 @@ def main():
         )
 
     elif args.Functions == "delete_data":
-        print(
-            delete_data(
-                args.database_name, args.table_name, ast.literal_eval(args.data_id)
-            )
-        )
+        print(delete_data(args.table_name, ast.literal_eval(args.data_id)))
 
     elif args.Functions == "get_table_columns":
-        print(get_table_columns(args.database_name, args.table_name))
+        print(get_table_columns(args.table_name))
 
     else:
         print(f"Unknown function: {args.action}")

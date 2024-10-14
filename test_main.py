@@ -156,7 +156,6 @@ def test_delete_data():
 
 # Test read all column names
 def test_get_table_columns():
-
     columns = get_table_columns("le88_tbl_air_quality")
     assert len(columns.split(",")) == 6
     print("Reading All Column Test Successful")
