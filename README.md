@@ -9,7 +9,8 @@ The requirements are:
 1. Do the standard CI/CD setup
 1. Connect to a SQL database
 1. Perform CRUD operations
-1. Write at least two different SQL queries
+1. Design a complex SQL query involving joins, aggregation, and sorting
+1. Provide an explanation for what the query is doing and the expected results
 
 
 
