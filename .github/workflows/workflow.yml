@@ -12,6 +12,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Set up Environment Variables
+        run: |
+          echo "DATABRICKS_API_KEY=${{ secrets.DATABRICKS_API_KEY }}" >> $GITHUB_ENV
+          echo "DATABRICKS_SERVER_HOST=${{ secrets.DATABRICKS_SERVER_HOST }}" >> $GITHUB_ENV
+          echo "DATABRICKS_SQL_HTTP=${{ secrets.DATABRICKS_SQL_HTTP }}" >> $GITHUB_ENV
+          echo "APP_TOKEN=${{ secrets.APP_TOKEN }}" >> $GITHUB_ENV
       - name: install packages
         run: make install
       - name: format
@@ -19,20 +25,15 @@ jobs:
       - name: lint
         run: make lint
       - name: test
-        env: 
-          DATABRICKS_API_KEY: ${{secrets.DATABRICKS_API_KEY}}
-          DATABRICKS_SERVER_HOST: ${{secrets.DATABRICKS_SERVER_HOST}}
-          DATABRICKS_SQL_HTTP: ${{secrets.DATABRICKS_SQL_HTTP}}
-          APP_TOKEN: ${{secrets.APP_TOKEN}}
+        # env: # it appears this doesn't set global variables
+        #   DATABRICKS_API_KEY: ${{secrets.DATABRICKS_API_KEY}}
+        #   DATABRICKS_SERVER_HOST: ${{secrets.DATABRICKS_SERVER_HOST}}
+        #   DATABRICKS_SQL_HTTP: ${{secrets.DATABRICKS_SQL_HTTP}}
+        #   APP_TOKEN: ${{secrets.APP_TOKEN}}
         run: make test
       - name: extract 
         run: make extract 
       - name: transform and load
-        env: 
-          DATABRICKS_API_KEY: ${{secrets.DATABRICKS_API_KEY}}
-          DATABRICKS_SERVER_HOST: ${{secrets.DATABRICKS_SERVER_HOST}}
-          DATABRICKS_SQL_HTTP: ${{secrets.DATABRICKS_SQL_HTTP}}
-          APP_TOKEN: ${{secrets.APP_TOKEN}}
         run: make transform_and_load 
       - name: query
         run: make query
