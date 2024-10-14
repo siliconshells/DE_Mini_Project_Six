@@ -15,20 +15,24 @@ jobs:
       - name: install packages
         run: make install
       - name: format
+        run: make format
+      - name: lint
+        run: make lint
+      - name: test
         env: 
           DATABRICKS_API_KEY: ${{secrets.DATABRICKS_API_KEY}}
           DATABRICKS_SERVER_HOST: ${{secrets.DATABRICKS_SERVER_HOST}}
           DATABRICKS_SQL_HTTP: ${{secrets.DATABRICKS_SQL_HTTP}}
           APP_TOKEN: ${{secrets.APP_TOKEN}}
-        run: make format
-      - name: lint
-        run: make lint
-      - name: test
         run: make test
-      
       - name: extract 
         run: make extract 
       - name: transform and load
+        env: 
+          DATABRICKS_API_KEY: ${{secrets.DATABRICKS_API_KEY}}
+          DATABRICKS_SERVER_HOST: ${{secrets.DATABRICKS_SERVER_HOST}}
+          DATABRICKS_SQL_HTTP: ${{secrets.DATABRICKS_SQL_HTTP}}
+          APP_TOKEN: ${{secrets.APP_TOKEN}}
         run: make transform_and_load 
       - name: query
         run: make query
