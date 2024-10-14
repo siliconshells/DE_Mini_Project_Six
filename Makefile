@@ -27,7 +27,7 @@ generate_and_push:
 	git config --local user.email "action@github.com"; \
 	git config --local user.name "GitHub Action"; \
 	git add .; \
-	git commit -m "Add generated plots and markdown"; \
+	git commit -m "Add generated Query results markdown"; \
 	git push; \
 
 all: install format lint test extract transform_and_load query generate_and_push
