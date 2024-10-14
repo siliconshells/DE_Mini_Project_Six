@@ -25,3 +25,12 @@ jobs:
           DATABRICKS_SQL_HTTP: ${{secrets.DATABRICKS_SQL_HTTP}}
           APP_TOKEN: ${{secrets.APP_TOKEN}}
         run: make test
+      
+      - name: extract 
+        run: make extract 
+      - name: transform and load
+        run: make transform_and_load 
+      - name: query
+        run: make query
+      - name: generate_and_push
+        run: make generate_and_push

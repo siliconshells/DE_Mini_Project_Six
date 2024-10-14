@@ -8,7 +8,7 @@ from my_lib.crud import (
     update_data,
     get_table_columns,
 )
-from query import query
+from sql_scripts import query
 
 column_map = {
     "air_quality_id": 0,

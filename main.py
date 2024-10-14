@@ -1,78 +1,145 @@
-from my_lib.crud import read_data
-from query import query
-import pandas as pd
-import re
-from my_lib.util import write_markdown
+import sys
+import argparse
+from my_lib.extract import extract
+from my_lib.transform import transform_n_load
+from my_lib.crud import (
+    read_data,
+    read_all_data,
+    save_data,
+    delete_data,
+    update_data,
+    get_table_columns,
+)
+import ast
 
 
-# Get the average air quality for the different indicators
-def get_average_air_quality():
-    rows, executed = read_data(query.air_quality_indicators_average, [], True)
-    panda_table = pd.DataFrame([[col for col in row] for row in rows])
-    panda_table = panda_table.rename(
-        mapper={
-            0: "Air Quality Indicator",
-            1: "No of Occurance",
-            2: "Average",
-            3: "Minimum",
-            4: "Maximum",
-        },
-        axis="columns",
+def handle_arguments(args):
+    """add action based on inital calls"""
+    parser = argparse.ArgumentParser(description="DE ETL And Query Script")
+    parser.add_argument(
+        "Functions",
+        choices=[
+            "extract",
+            "transform_n_load",
+            "read_data",
+            "read_all_data",
+            "save_data",
+            "delete_data",
+            "update_data",
+        ],
     )
-    panda_table.index = panda_table.index + 1
 
-    write_markdown(
-        "Different Air Quality indicator readings in New York for 2021",
-        header=True,
-        new_log_file=True,
-    )
-    write_markdown("The query executed was:")
-    write_markdown(executed, True)
-    write_markdown("And the result was:")
-    write_markdown(panda_table.to_markdown(), last_in_group=True)
-    return "Query executed successfully"
+    args = parser.parse_args(args[:1])
+    print(args.Functions)
+    if args.Functions == "extract":
+        parser.add_argument("url")
+        parser.add_argument("file_name")
+
+    elif args.Functions == "transform_n_load":
+        parser.add_argument("local_dataset")
+        parser.add_argument("database_name")
+        parser.add_argument("new_data_tables")
+        parser.add_argument("new_lookup_tables")
+        parser.add_argument("column_attributes")
+        parser.add_argument("column_map")
+
+    elif args.Functions == "read_data":
+        parser.add_argument("database_name")
+        parser.add_argument("table_name")
+        parser.add_argument("data_id")
+
+    elif args.Functions == "read_all_data":
+        parser.add_argument("database_name")
+        parser.add_argument("table_name")
+
+    elif args.Functions == "save_data":
+        parser.add_argument("database_name")
+        parser.add_argument("table_name")
+        parser.add_argument("row")
+
+    elif args.Functions == "update_data":
+        parser.add_argument("database_name")
+        parser.add_argument("table_name")
+        parser.add_argument("data_id")
+        parser.add_argument("things_to_update")
+
+    elif args.Functions == "delete_data":
+        parser.add_argument("database_name")
+        parser.add_argument("table_name")
+        parser.add_argument("data_id")
+
+    elif args.Functions == "get_table_columns":
+        parser.add_argument("database_name")
+        parser.add_argument("table_name")
+
+    # parse again
+    return parser.parse_args(sys.argv[1:])
 
 
-# Get air quality for the each indicator for NY neighbourhoods
-def get_location_average_air_quality():
-    # Get the indicators
-    rows = read_data(query.indicators, [])
-    for indicator in rows:
-        # Get average for locations
-        # "".join([ c if c.isalnum() else "_" for c in s ])
-        rows, executed = read_data(
-            query.air_quality_location_indicator_average,
-            [
-                re.sub("[^0-9a-zA-Z]+", "_", indicator["indicator_name"]).lower(),
-                indicator["indicator_id"],
-            ],
-            True,
+def main():
+    """handles all the cli commands"""
+
+    args = handle_arguments(sys.argv[1:])
+
+    if args.Functions == "extract":
+        print("Extracting data...")
+        print(extract(args.url, args.file_name))
+
+    elif args.Functions == "transform_n_load":
+        print("Transforming and loading data...")
+        print(
+            transform_n_load(
+                args.local_dataset,
+                args.database_name,
+                ast.literal_eval(args.new_data_tables),
+                ast.literal_eval(args.new_lookup_tables),
+                ast.literal_eval(args.column_attributes),
+                ast.literal_eval(args.column_map),
+            )
         )
-        panda_table = pd.DataFrame([[col for col in row] for row in rows])
-        panda_table = panda_table.rename(
-            mapper={
-                0: "Location Name",
-                1: indicator["indicator_name"] + " Occurrance",
-                2: "Average",
-                3: "Minimum",
-                4: "Maximum",
-            },
-            axis="columns",
-        )
-        panda_table.index = panda_table.index + 1
 
-        title = "{0} Air Quality in New York neighbourhoods for 2021".format(
-            indicator["indicator_name"]
+    elif args.Functions == "read_data":
+        print(
+            read_data(
+                args.database_name, args.table_name, ast.literal_eval(args.data_id)
+            )
         )
-        write_markdown(title, header=True)
-        write_markdown("The query executed was:")
-        write_markdown(executed, True)
-        write_markdown("And the result was:")
-        write_markdown(panda_table.to_markdown(), last_in_group=True)
 
-    return "Query executed successfully"
+    elif args.Functions == "read_all_data":
+        print(read_all_data(args.database_name, args.table_name))
+
+    elif args.Functions == "save_data":
+        print(
+            save_data(
+                args.database_name,
+                args.table_name,
+                ast.literal_eval(args.row),
+            )
+        )
+
+    elif args.action == "update_data":
+        print(
+            update_data(
+                args.database_name,
+                args.table_name,
+                ast.literal_eval(args.data_id),
+                ast.literal_eval(args.things_to_update),
+            )
+        )
+
+    elif args.Functions == "delete_data":
+        print(
+            delete_data(
+                args.database_name, args.table_name, ast.literal_eval(args.data_id)
+            )
+        )
+
+    elif args.Functions == "get_table_columns":
+        print(get_table_columns(args.database_name, args.table_name))
+
+    else:
+        print(f"Unknown function: {args.action}")
 
 
 if __name__ == "__main__":
-    print(get_average_air_quality())
-    print(get_location_average_air_quality())
+    main()
