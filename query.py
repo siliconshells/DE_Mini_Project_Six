@@ -12,7 +12,7 @@ def get_average_air_quality():
     panda_table = panda_table.rename(
         mapper={
             0: "Air Quality Indicator",
-            1: "No of Occurance",
+            1: "No of Occurances",
             2: "Average",
             3: "Minimum",
             4: "Maximum",
@@ -28,7 +28,9 @@ def get_average_air_quality():
     )
     write_markdown("The query executed was:")
     write_markdown(executed, True)
-    write_markdown("And the result was:")
+    write_markdown(
+        "And the result was (column names renamed with the pandas 'rename' function):"
+    )
     write_markdown(panda_table.to_markdown(), last_in_group=True)
     return "Query executed successfully"
 
@@ -52,7 +54,7 @@ def get_location_average_air_quality():
         panda_table = panda_table.rename(
             mapper={
                 0: "Location Name",
-                1: indicator["indicator_name"] + " Occurrance",
+                1: indicator["indicator_name"] + " Occurrances",
                 2: "Average",
                 3: "Minimum",
                 4: "Maximum",
@@ -67,7 +69,9 @@ def get_location_average_air_quality():
         write_markdown(title, header=True)
         write_markdown("The query executed was:")
         write_markdown(executed, True)
-        write_markdown("And the result was:")
+        write_markdown(
+            "And the result was (column names renamed with the pandas 'rename' function):"
+        )
         write_markdown(panda_table.to_markdown(), last_in_group=True)
 
     return "Query executed successfully"
