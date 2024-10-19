@@ -49,7 +49,7 @@ def test_extract():
 
 # Test transform and load
 def test_transform_and_load():
-    transform_n_load(
+    result = transform_n_load(
         local_dataset="air_quality.csv",
         new_data_tables={
             "le88_tbl_air_quality": [
@@ -101,6 +101,7 @@ def test_transform_and_load():
             "fn_indicator_id": 1,
         },
     )
+    assert result == "Transform and load Successful"
     print("Transform and Load Test Successful")
 
 
